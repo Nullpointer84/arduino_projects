@@ -64,6 +64,11 @@ void loop() {
   delay(2000);
 }
 
+int16_t rectX = 0;
+int16_t rectY = 84;
+int16_t rectWidth = 240;
+int16_t rectHeight = 64;
+
 void printIaqStatus(IaqStruct* iaq) {
   tft.setCursor(0,0);
   tft.fillScreen(ST77XX_BLACK);
@@ -78,11 +83,6 @@ void printIaqStatus(IaqStruct* iaq) {
   tft.print("Accuracy ");
   tft.println(iaq->iaqAccuracy);
 
-  tft.setTextSize(3);
-  setIaqColor(iaq->staticIaq);
-  tft.print("Iaq ");
-  tft.println(iaq->staticIaq);
-
   tft.setTextSize(2);
   tft.setTextColor(ST77XX_WHITE);
   tft.print("Temp ");
@@ -95,10 +95,18 @@ void printIaqStatus(IaqStruct* iaq) {
   tft.print("Pressure ");
   tft.println(iaq->pressure);
 
-  tft.fillRect(0, 96, 240, 84, getIaqColor(iaq->staticIaq));
+  tft.println("");
+  tft.println("");
+
+  tft.fillRect(rectX, rectY, rectWidth, rectHeight, getIaqBackGroundColor(iaq->staticIaq));
+  tft.drawRect(rectX, rectY, rectWidth, rectHeight, getIaqForeGroundColor(iaq->staticIaq));
+  tft.setTextSize(3);
+  tft.setTextColor(getIaqForeGroundColor(iaq->staticIaq));
+  tft.print(" Iaq ");
+  tft.println(iaq->staticIaq);
 }
 
-uint16_t getIaqColor(float staticIaq) {
+uint16_t getIaqBackGroundColor(float staticIaq) {
   uint16_t targetColor;
   if(staticIaq>0 && staticIaq<excellent_max) {
     targetColor = COLOR_EXCELLENT;
@@ -118,26 +126,22 @@ uint16_t getIaqColor(float staticIaq) {
   return targetColor;  
 }
 
-void setIaqColor(float staticIaq) {
-  tft.setTextColor(getIaqColor(staticIaq));
+uint16_t getIaqForeGroundColor(float staticIaq) {
+  uint16_t targetColor;
+  if(staticIaq>0 && staticIaq<excellent_max) {
+    targetColor = ST77XX_BLACK;
+  } else if(staticIaq>excellent_max && staticIaq<good_max) {
+    targetColor = ST77XX_BLACK;
+  } else if(staticIaq>good_max && staticIaq<lightly_max) {
+    targetColor = ST77XX_BLACK;
+  } else if(staticIaq>lightly_max && staticIaq<moderately_max) {
+    targetColor = ST77XX_BLACK;
+  } else if(staticIaq>moderately_max && staticIaq<heavily_max) {
+    targetColor = ST77XX_BLACK;
+  } else if(staticIaq>heavily_max && staticIaq<severely_max) {
+    targetColor = ST77XX_WHITE;
+  } else {
+    targetColor = ST77XX_WHITE;
+  }
+  return targetColor;  
 }
-
-void tftPrintTest() {
-  tft.setTextWrap(false);
-  tft.fillScreen(ST77XX_BLACK);
-  tft.setCursor(0, 30);
-  tft.setTextColor(ST77XX_RED);
-  tft.setTextSize(1);
-  tft.println("Hello World!");
-  tft.setTextColor(ST77XX_YELLOW);
-  tft.setTextSize(2);
-  tft.println("Hello World!");
-  tft.setTextColor(ST77XX_GREEN);
-  tft.setTextSize(3);
-  tft.println("Hello World!");
-  tft.setTextColor(ST77XX_BLUE);
-  tft.setTextSize(4);
-  tft.print(1234.567);
-  delay(1500);
-}
-
