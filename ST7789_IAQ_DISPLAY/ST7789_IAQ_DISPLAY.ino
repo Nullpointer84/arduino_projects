@@ -28,6 +28,11 @@ const int heavily_max = 250;
 const int severely_max = 350;
 const int extremely_max = 351;
 
+int16_t rectX = 0;
+int16_t rectY = 84;
+int16_t rectWidth = 240;
+int16_t rectHeight = 64;
+
 #ifndef IAQ_STRUCT_H
 #define IAQ_STRUCT_H
 struct IaqStruct {
@@ -63,11 +68,6 @@ void loop() {
   printIaqStatus(maxAccuracySample);
   delay(2000);
 }
-
-int16_t rectX = 0;
-int16_t rectY = 84;
-int16_t rectWidth = 240;
-int16_t rectHeight = 64;
 
 void printIaqStatus(IaqStruct* iaq) {
   tft.setCursor(0,0);
